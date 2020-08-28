@@ -1,0 +1,126 @@
+{
+  "id": "83adc113-dbb0-4b24-8a39-1489ccfd054f",
+  "version": "2.0",
+  "name": "SeleniumIDEDemo",
+  "url": "https://www.google.com",
+  "tests": [{
+    "id": "9487bf7e-1730-4637-a2c0-3c6288aa1133",
+    "name": "SeleniumDemo",
+    "commands": [{
+      "id": "0d265ccf-298e-4707-95c5-303a0dff70a4",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "cc8aed58-e1a6-491e-9f33-c211e7289365",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "846x694",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d2d0fc2e-5322-4b0e-8c06-4f0bab6b1fed",
+      "comment": "",
+      "command": "click",
+      "target": "name=q",
+      "targets": [
+        ["name=q", "name"],
+        ["css=.gLFyf", "css:finder"],
+        ["xpath=//input[@name='q']", "xpath:attributes"],
+        ["xpath=//form[@id='tsf']/div[2]/div/div/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "448398d4-c2b3-4022-a03a-d9e5abb12ccc",
+      "comment": "",
+      "command": "type",
+      "target": "name=q",
+      "targets": [
+        ["name=q", "name"],
+        ["css=.gLFyf", "css:finder"],
+        ["xpath=//input[@name='q']", "xpath:attributes"],
+        ["xpath=//form[@id='tsf']/div[2]/div/div/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "Banana Song"
+    }, {
+      "id": "673e2eee-7657-4e96-b55c-62f19d661a5d",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "name=q",
+      "targets": [
+        ["name=q", "name"],
+        ["css=.gLFyf", "css:finder"],
+        ["xpath=//input[@name='q']", "xpath:attributes"],
+        ["xpath=//form[@id='tsf']/div[2]/div/div/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "${KEY_ENTER}"
+    }, {
+      "id": "a5e3ceda-aab2-4872-ac40-6db295632dd1",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h3[contains(.,'Despicable Me 2 | Minions Banana Song (2013) SNSD TTS ...')]",
+      "targets": [
+        ["css=.g:nth-child(3) .LC20lb", "css:finder"],
+        ["xpath=//div[@id='rso']/div[3]/div/div/a/h3", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/a/h3", "xpath:position"],
+        ["xpath=//h3[contains(.,'Despicable Me 2 | Minions Banana Song (2013) SNSD TTS ...')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "dee24935-6bc5-49b2-ac49-ccac87df1fd2",
+      "comment": "",
+      "command": "click",
+      "target": "css=.view-count",
+      "targets": [
+        ["css=.view-count", "css:finder"],
+        ["xpath=//div[@id='count']/yt-view-count-renderer/span", "xpath:idRelative"],
+        ["xpath=//yt-view-count-renderer/span", "xpath:position"],
+        ["xpath=//span[contains(.,'74,775,582次观看')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "dff8e643-3cf4-4f2e-a594-99798761515c",
+      "comment": "",
+      "command": "assertTitle",
+      "target": "Despicable Me 2 | Minions Banana Song (2013) SNSD TTS - YouTube",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "cd4f4db6-401b-4af1-85aa-dcfae6645794",
+      "comment": "",
+      "command": "storeText",
+      "target": "css=.view-count",
+      "targets": [],
+      "value": "viewed"
+    }, {
+      "id": "3833aae4-93ea-4b78-8c18-7ec06506ac38",
+      "comment": "",
+      "command": "executeScript",
+      "target": "if(${viewed}.match(/[5-9][0-9],[0-9]{3},[0-9]{3} views/)){return true;}else{return false};",
+      "targets": [],
+      "value": "correct"
+    }, {
+      "id": "6082aa9b-0b88-45f9-80d2-8da96ff38691",
+      "comment": "",
+      "command": "assert",
+      "target": "correct",
+      "targets": [],
+      "value": "true"
+    }]
+  }],
+  "suites": [{
+    "id": "e1a30972-4cf6-44b8-904a-49affa32cd3b",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["9487bf7e-1730-4637-a2c0-3c6288aa1133"]
+  }],
+  "urls": ["https://www.google.com/"],
+  "plugins": []
+}
