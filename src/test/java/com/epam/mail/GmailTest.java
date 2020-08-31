@@ -1,6 +1,8 @@
 package com.epam.mail;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -9,10 +11,12 @@ public class GmailTest {
     private static final String USER_PASSWORD = "Welcome2@";
 
     Gmail gmail;
+    WebDriver driver;
 
     @BeforeClass
     public void setUp(){
         gmail = new Gmail();
+        driver = gmail.driver;
     }
 
 
@@ -63,9 +67,9 @@ public class GmailTest {
         boolean logedOut = gmail.logOut();
         Assert.assertTrue(logedOut);
     }
-    //    @AfterSuite
-//    public void closeDriver(){
-//        driver.close();
-//    }
+    @AfterClass
+    public void closeDriver(){
+        driver.quit();
+    }
 
 }

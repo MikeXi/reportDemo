@@ -18,7 +18,7 @@ public class Gmail {
     private static final String TO = "mike_xi@epam.com";
     private static final String SUBJECT = "Automation test email Subject";
     private static final String BODY = "Automation test email Body";
-    private WebDriver driver;
+    public WebDriver driver;
 
     public Gmail(){
         System.setProperty("webdriver.chrome.driver", DRIVER_LOCATION);
