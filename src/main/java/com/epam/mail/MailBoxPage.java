@@ -4,14 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
 public class MailBoxPage extends BasePage{
     private static final String TO = "mike_xi@epam.com";
-//    private static final String SUBJECT = "Automation test email Subject";
     private static final String BODY = "Automation test email Body";
 
     private By accoutInfoLocator = By.cssSelector("a[class='gb_D gb_Ua gb_i']");
@@ -127,7 +125,6 @@ public class MailBoxPage extends BasePage{
 
     public int getRowsCount(By menuLocator){
         List<WebElement> rows = getRows(menuLocator);
-        System.out.println(rows.size());
         return rows.size();
     }
 
@@ -138,7 +135,6 @@ public class MailBoxPage extends BasePage{
         for(int i = 0; i < rowCount; i++){
             WebElement row = rows.get(i).findElement(emailRowLocator);
             String rowSubject = row.getText();
-            System.out.println(rowSubject);
             if(rowSubject.equals(emailSubject)){
                 firstEmail = row;
                 highlightElementByJS(firstEmail);
