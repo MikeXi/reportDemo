@@ -1,11 +1,15 @@
 package com.epam.mail;
 
+import com.epam.util.TestListener;
 import org.openqa.selenium.WebElement;
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
+@Listeners({TestListener.class})
 public class MailBoxPageTest extends BasicTest{
 
     MailBoxPage mailBoxPage;
@@ -18,37 +22,37 @@ public class MailBoxPageTest extends BasicTest{
     @Test(groups = "sendmail",priority = 1)
     public void testAddDraftMail(){
         boolean draftAdded = mailBoxPage.addDraftEmail(emailSubject);
-        Assert.assertTrue(draftAdded);
+        assertThat(draftAdded, is(equalTo(true)));
     }
 
     @Test(groups = "sendmail",priority = 6)
     public void testGetSentEmail(){
         WebElement sent = mailBoxPage.getSentEmail(emailSubject);
-        Assert.assertNotNull(sent);
+        assertThat(sent, is(notNullValue()));
     }
 
     @Test(groups = "sendmail",priority = 7)
     public void testSearchEmail(){
         WebElement searchedEmail = mailBoxPage.searchEmail(emailSubject);
-        Assert.assertNotNull(searchedEmail);
+        assertThat(searchedEmail, is(notNullValue()));
     }
 
     @Test(groups = "sendmail",priority = 8)
     public void testDragSentEmailToStarred(){
         WebElement starredEmail = mailBoxPage.dragSentMailToStarred(emailSubject);
-        Assert.assertNotNull(starredEmail);
+        assertThat(starredEmail, is(notNullValue()));
     }
 
     @Test(groups = "sendmail",priority = 9)
     public void testDeleteEmail(){
         WebElement deletedEmail = mailBoxPage.deleteEmail(emailSubject);
-        Assert.assertNull(deletedEmail);
+        assertThat(deletedEmail, is(equalTo(null)));
     }
 
     @Test(groups = "logout")
     public void testLogout(){
         boolean logedOut = mailBoxPage.logOut();
-        Assert.assertTrue(logedOut);
+        assertThat(logedOut, is(equalTo(true)));
     }
 
 }

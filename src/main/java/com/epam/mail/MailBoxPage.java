@@ -1,5 +1,7 @@
 package com.epam.mail;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -9,7 +11,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.List;
 
 public class MailBoxPage extends BasePage{
-    private static final String TO = "mike_xi@epam.com";
+    private final Logger logger = LogManager.getRootLogger();
+
+    private static final String TO = "mike_xi@epam.model";
     private static final String BODY = "Automation test email Body";
 
     private By accoutInfoLocator = By.cssSelector("a[class='gb_D gb_Ua gb_i']");
@@ -21,7 +25,7 @@ public class MailBoxPage extends BasePage{
     private By sentMenuLocator = By.cssSelector("div[data-tooltip='Sent']");
     private By starredMenuLocator = By.cssSelector("div[data-tooltip='Starred']");
     private By searchTextLocator = By.cssSelector("input[aria-label='Search mail']");
-    private By logoutButtonLocator = By.cssSelector("a[class='gb_Mb gb_mg gb_ug gb_7e gb_7c']");
+    private By logoutButtonLocator = By.cssSelector("a[class='gb_Lb gb_kg gb_sg gb_5e gb_6c']");
 
     public MailBoxPage(WebDriver driver){
         super(driver);
@@ -31,6 +35,7 @@ public class MailBoxPage extends BasePage{
         WebElement account = wait.until(ExpectedConditions.visibilityOfElementLocated(accoutInfoLocator));
         String accountInfos = account.getAttribute("aria-label");
         String[] accountInfo = accountInfos.split(":");
+        logger.info("User is: " + accountInfo[1].trim());
         return accountInfo[1].trim();
     }
 
@@ -84,6 +89,7 @@ public class MailBoxPage extends BasePage{
     public boolean logOut(){
         WebElement account = driver.findElement(accoutInfoLocator);
         clickElementByJS(account);
+        sleepSeconds(1);
         WebElement logOutButton = driver.findElement(logoutButtonLocator);
         clickElementByJS(logOutButton);
         LoginPage loginPage = new LoginPage(driver);

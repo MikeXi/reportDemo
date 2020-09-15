@@ -1,20 +1,28 @@
 package com.epam.mail;
 
-import org.testng.Assert;
+import com.epam.model.User;
+import com.epam.service.UserCreator;
+import com.epam.util.TestListener;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
+@Listeners({TestListener.class})
 public class LoginPageTest extends BasicTest{
-    private static final String USER_MAIL = "mikeximodule7@gmail.com";
-    private static final String USER_PASSWORD = "Welcome2@";
 
     LoginPage loginPage;
 
     @Test(groups = "login")
     public void testLoginGmail(){
         loginPage = new LoginPage(driver);
-        String str = loginPage.loginGmail(USER_MAIL,USER_PASSWORD);
-        Assert.assertEquals(str,"Mike Xi  \n" +
-                "(mikeximodule7@gmail.com)");
+        User user = UserCreator.withCredentialsFromProperty();
+        String str = loginPage.loginGmail(user);
+        assertThat(str, is(equalTo("Mike Xi  \n" +
+                "(mikeximodule7@gmail.com)")));
     }
 
 }

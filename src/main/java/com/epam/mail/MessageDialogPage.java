@@ -1,11 +1,14 @@
 package com.epam.mail;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class MessageDialogPage extends BasePage{
+    private final Logger logger = LogManager.getRootLogger();
 
     private By draftMenuLocator = By.cssSelector("div[data-tooltip='Drafts']");
     private By messageDialogLocator = By.cssSelector("div[role='dialog']");
@@ -28,10 +31,13 @@ public class MessageDialogPage extends BasePage{
     public void setMailContents(String to, String subject, String body){
         WebElement messageDialog = wait.until(ExpectedConditions.visibilityOfElementLocated(messageDialogLocator));
         WebElement toText = messageDialog.findElement(toTextAreaLocator);
+        logger.info("Send to: " + to);
         toText.sendKeys(to);
         WebElement subjectText = messageDialog.findElement(subjectTextLocator);
+        logger.info("Email Subject is: " + subject);
         subjectText.sendKeys(subject);
         WebElement bodyText = messageDialog.findElement(bodyTextLocator);
+        logger.info("Email body is: " + body);
         bodyText.sendKeys(body);
     }
 
