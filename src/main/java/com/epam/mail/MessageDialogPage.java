@@ -2,76 +2,32 @@ package com.epam.mail;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.PageFactory;
+import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementDecorator;
+import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementLocatorFactory;
 
-public class MessageDialogPage extends BasePage{
+public class MessageDialogPage extends MessageDialogArrow{
     private final Logger logger = LogManager.getRootLogger();
-
-    private By draftMenuLocator = By.cssSelector("div[data-tooltip='Drafts']");
-    private By messageDialogLocator = By.cssSelector("div[role='dialog']");
-    private By toTextAreaLocator = By.cssSelector("textarea[aria-label='To']");
-    private By subjectTextLocator = By.cssSelector("input[name='subjectbox']");
-    private By bodyTextLocator = By.cssSelector("div[aria-label='Message Body']");
-    private By closeIconLocator = By.cssSelector("img[aria-label='Save & close']");
-    private By toEmailLocator = By.cssSelector("input[name='to']");
-    private By messageDialogTitleLocator = By.cssSelector("div.aYF");
-    private By sendButtonLocator = By.cssSelector("div[data-tooltip^='Send']");
-
-    MailBoxPage mailBoxPage;
-
 
     public MessageDialogPage(WebDriver driver){
         super(driver);
-        mailBoxPage = new MailBoxPage(driver);
+        PageFactory.initElements(new HtmlElementDecorator(new HtmlElementLocatorFactory(driver)), this);
     }
 
     public void setMailContents(String to, String subject, String body){
-        WebElement messageDialog = wait.until(ExpectedConditions.visibilityOfElementLocated(messageDialogLocator));
-        WebElement toText = messageDialog.findElement(toTextAreaLocator);
-        logger.info("Send to: " + to);
-        toText.sendKeys(to);
-        WebElement subjectText = messageDialog.findElement(subjectTextLocator);
-        logger.info("Email Subject is: " + subject);
-        subjectText.sendKeys(subject);
-        WebElement bodyText = messageDialog.findElement(bodyTextLocator);
-        logger.info("Email body is: " + body);
-        bodyText.sendKeys(body);
+        super.setMailContents(to, subject, body);
     }
 
     public String getMailContent(String emailSubject, String field){
-        WebElement messageDialog = wait.until(ExpectedConditions.visibilityOfElementLocated(messageDialogLocator));
-        switch (field){
-            case "TO":
-                WebElement toText = messageDialog.findElement(toEmailLocator);
-                return toText.getAttribute("value");
-            case "SUBJECT":
-                WebElement subjectText = messageDialog.findElement(messageDialogTitleLocator);
-                return subjectText.getText();
-            default:
-                WebElement bodyText = messageDialog.findElement(bodyTextLocator);
-                return bodyText.getText();
-        }
+        return super.getMailContent(emailSubject, field);
     }
 
     public Boolean sendEmail(){
-        int beforeSendDraftCount = mailBoxPage.getDraftMailCount();
-        WebElement emailDialog = driver.findElement(messageDialogLocator);
-        WebElement sendButton = emailDialog.findElement(sendButtonLocator);
-        sendButton.click();
-        mailBoxPage.sleepSeconds(2);
-        int afterSendDraftCount = mailBoxPage.getDraftMailCount();
-        if(afterSendDraftCount == beforeSendDraftCount - 1){
-            return true;
-        }else{
-            return false;
-        }
+        return super.sendEmail();
     }
 
     public void closeMessageDialog(){
-        WebElement closeIcon = driver.findElement(closeIconLocator);
-        closeIcon.click();
+       super.closeMessageDialog();
     }
 }

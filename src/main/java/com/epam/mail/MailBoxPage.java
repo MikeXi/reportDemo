@@ -2,157 +2,54 @@ package com.epam.mail;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.PageFactory;
+import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementDecorator;
+import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementLocatorFactory;
 
-import java.util.List;
-
-public class MailBoxPage extends BasePage{
+public class MailBoxPage extends MailBoxArrow{
     private final Logger logger = LogManager.getRootLogger();
 
     private static final String TO = "mike_xi@epam.model";
     private static final String BODY = "Automation test email Body";
 
-    private By accoutInfoLocator = By.cssSelector("a[class='gb_D gb_Ua gb_i']");
-    private By addEmailButtonLocator = By.cssSelector("div[gh='cm']");
-    private By rowsLocator = By.cssSelector("tr[role='row']");
-    private By emailRowLocator = By.cssSelector("span.bog");
-    private By draftRowCountLocator = By.cssSelector("div.bsU");
-    private By draftMenuLocator = By.cssSelector("div[data-tooltip='Drafts']");
-    private By sentMenuLocator = By.cssSelector("div[data-tooltip='Sent']");
-    private By starredMenuLocator = By.cssSelector("div[data-tooltip='Starred']");
-    private By searchTextLocator = By.cssSelector("input[aria-label='Search mail']");
-    private By logoutButtonLocator = By.cssSelector("a[class='gb_Lb gb_kg gb_sg gb_5e gb_6c']");
-
     public MailBoxPage(WebDriver driver){
         super(driver);
+        PageFactory.initElements(new HtmlElementDecorator(new HtmlElementLocatorFactory(driver)), this);
     }
 
     public String getAccountEmail(){
-        WebElement account = wait.until(ExpectedConditions.visibilityOfElementLocated(accoutInfoLocator));
-        String accountInfos = account.getAttribute("aria-label");
-        String[] accountInfo = accountInfos.split(":");
-        logger.info("User is: " + accountInfo[1].trim());
-        return accountInfo[1].trim();
+        return super.getAccountEmail();
     }
 
 
     public boolean addDraftEmail(String emailSubject){
-        int draftCountBefore = getDraftMailCount();
-        MessageDialogPage messageDialogPage = new MessageDialogPage(driver);
-        WebElement addEmailButton = driver.findElement(addEmailButtonLocator);
-        clickElementByJS(addEmailButton);
-        messageDialogPage.setMailContents(TO,emailSubject,BODY);
-        messageDialogPage.closeMessageDialog();
-        sleepSeconds(2);
-        int draftCountAfter = getDraftMailCount();
-        clickFirstEmailSubject(draftMenuLocator,emailSubject);
-        return draftCountAfter == draftCountBefore + 1;
+        return super.addDraftEmail(emailSubject, TO, BODY);
     }
 
     public WebElement getSentEmail(String emailSubject){
-        return getEmailWithSubject(sentMenuLocator,emailSubject);
+        return super.getSentEmail(emailSubject);
     }
 
     public WebElement searchEmail(String emailSubject){
-        WebElement searchText = driver.findElement(searchTextLocator);
-        searchText.sendKeys(emailSubject);
-        sendKey(Keys.ENTER);
-        sleepSeconds(2);
-        return getEmailWithSubject(sentMenuLocator,emailSubject);
+        return super.searchEmail(emailSubject);
     }
 
     public WebElement dragSentMailToStarred(String emailSubject){
-        WebElement sentEmail = getEmailWithSubject(sentMenuLocator, emailSubject);
-        highlightElementByJS(sentEmail);
-        WebElement starredMenu = driver.findElement(starredMenuLocator);
-        highlightElementByJS(starredMenu);
-        dragAndDrop(sentEmail,starredMenu);
-        return getEmailWithSubject(starredMenuLocator,emailSubject);
+        return super.dragSentMailToStarred(emailSubject);
     }
 
     public WebElement deleteEmail(String emailSubject){
-        WebElement email = getEmailWithSubject(starredMenuLocator, emailSubject);
-        highlightElementByJS(email);
-        contextClick(email);
-        for(int i = 0; i < 6; i ++){
-            sendKey(Keys.DOWN);
-        }
-        sendKey(Keys.ENTER);
-        sleepSeconds(2);
-        return getEmailWithSubject(starredMenuLocator, emailSubject);
+        return super.deleteEmail(emailSubject);
     }
 
     public boolean logOut(){
-        WebElement account = driver.findElement(accoutInfoLocator);
-        clickElementByJS(account);
-        sleepSeconds(1);
-        WebElement logOutButton = driver.findElement(logoutButtonLocator);
-        clickElementByJS(logOutButton);
-        LoginPage loginPage = new LoginPage(driver);
-        WebElement login = loginPage.getInitialView();
-        return login.isDisplayed();
-    }
-
-    public void tabClick(By menuLocator){
-        String url = driver.getCurrentUrl();
-        boolean isNotSearch = !(url.contains("search"));
-        if(isNotSearch) {
-            String menuName = url.split("#")[1].toUpperCase();
-            boolean inocrrectMenu = !menuLocator.toString().toUpperCase().contains(menuName);
-            if (inocrrectMenu) {
-                WebElement menu = driver.findElement(menuLocator);
-                highlightElementByJS(menu);
-                clickElementByJS(menu);
-                while (inocrrectMenu) {
-                    sleepSeconds(1);
-                    url = driver.getCurrentUrl();
-                    menuName = url.split("#")[1].toUpperCase();
-                    inocrrectMenu = !menuLocator.toString().toUpperCase().contains(menuName);
-                }
-            }
-        }
+        return super.logOut();
     }
 
     public int getDraftMailCount(){
-        WebElement draftsBox = driver.findElement(draftMenuLocator);
-        WebElement draftCountLabel = draftsBox.findElement(draftRowCountLocator);
-        return Integer.parseInt(draftCountLabel.getText());
-    }
-
-    public List<WebElement> getRows(By menuLocator){
-        tabClick(menuLocator);
-        List<WebElement> rows = driver.findElements(rowsLocator);
-        return rows;
-    }
-
-    public int getRowsCount(By menuLocator){
-        List<WebElement> rows = getRows(menuLocator);
-        return rows.size();
-    }
-
-    public WebElement getEmailWithSubject(By menuLocator, String emailSubject){
-        WebElement firstEmail = null;
-        List<WebElement> rows = getRows(menuLocator);
-        int rowCount = getRowsCount(menuLocator);
-        for(int i = 0; i < rowCount; i++){
-            WebElement row = rows.get(i).findElement(emailRowLocator);
-            String rowSubject = row.getText();
-            if(rowSubject.equals(emailSubject)){
-                firstEmail = row;
-                highlightElementByJS(firstEmail);
-                break;
-            }
-        }
-        return firstEmail;
-    }
-
-    public void clickFirstEmailSubject(By menuLocator, String emailSubject){
-        WebElement subjectCell = getEmailWithSubject(menuLocator,emailSubject);
-        clickElementByJS(subjectCell);
+        return super.getDraftMailCount();
     }
 
 }

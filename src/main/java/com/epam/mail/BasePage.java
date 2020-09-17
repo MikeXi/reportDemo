@@ -6,8 +6,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.yandex.qatools.htmlelements.element.HtmlElement;
 
-public abstract class BasePage {
+public class BasePage extends HtmlElement{
     final WebDriver driver;
     final WebDriverWait wait;
     final JavascriptExecutor jsExecutor;
