@@ -58,10 +58,7 @@ public class MailBoxArrow extends BasePage {
     private final Logger logger = LogManager.getRootLogger();
 
     public String getAccountEmail(){
-        boolean accountNotDisplayed = !accountButton.isDisplayed();
-        while(accountNotDisplayed){
-            sleepSeconds(2);
-        }
+        objectIsDisplayed(accountButton);
         String accountInfos = accountButton.getAttribute("aria-label");
         String[] accountInfo = accountInfos.split(":");
         return accountInfo[1].trim();

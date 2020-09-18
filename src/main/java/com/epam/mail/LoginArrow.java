@@ -1,6 +1,8 @@
 package com.epam.mail;
 
 import com.epam.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -11,6 +13,7 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 @Name("Login From")
 @FindBy(id = "initialView")
 public class LoginArrow extends BasePage {
+    private final Logger logger = LogManager.getRootLogger();
 
     @Name("Email address input")
     @FindBy(id = "identifierId")
@@ -35,7 +38,7 @@ public class LoginArrow extends BasePage {
         driver.get(URL);
         emailInput.sendKeys(user.getUsername());
         nextButton.click();
-        sleepSeconds(2);
+        objectIsDisplayed(passwordInput);
         passwordInput.sendKeys(user.getPassword());
         try {
             nextButton.click();

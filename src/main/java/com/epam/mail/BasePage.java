@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.yandex.qatools.htmlelements.element.HtmlElement;
+import ru.yandex.qatools.htmlelements.element.TextInput;
 
 public class BasePage extends HtmlElement{
     final WebDriver driver;
@@ -47,6 +48,19 @@ public class BasePage extends HtmlElement{
             Thread.sleep(seconds * 1000);
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+
+    public void objectIsDisplayed(WebElement object){
+        int count = 0;
+        boolean isNotDisplayed = !object.isDisplayed();
+        while (isNotDisplayed){
+            sleepSeconds(2);
+            count ++;
+            isNotDisplayed = !object.isDisplayed();
+            if(count == 10){
+                break;
+            }
         }
     }
 }
