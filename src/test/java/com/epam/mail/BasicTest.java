@@ -19,8 +19,9 @@ public class BasicTest {
     @Parameters({"env", "browser"})
     public void setUp(String env, String browser) throws IOException {
         TestDataReader.setEnvoronment(env);
-        DriverSingleton.setBrowser(browser);
-        driver = DriverSingleton.getDriver();
+        DriverSingleton driverSingleton = DriverSingleton.getInstance();
+        driverSingleton.setBrowser(browser);
+        driver = driverSingleton.getDriver();
         Random r = new Random();
         emailSubject = "Automation test email Subject" + r.nextInt(1000);
     }

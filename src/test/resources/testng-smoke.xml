@@ -23,6 +23,7 @@
                     <include name="testSendEmail"></include>
                 </methods>
             </class>
+            <class name="com.epam.mail.LogoutPageTest"/>
         </classes>
     </test>
 </suite>

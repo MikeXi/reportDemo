@@ -48,9 +48,9 @@ public class MailBoxArrow extends BasePage {
     @FindBy(css = "input[aria-label='Search mail']")
     private TextInput searchInput;
 
-    @Name("Logout button")
-    @FindBy(css = "a[class='gb_Ib gb_eg gb_mg gb_1e gb_7c']")
-    private Button logoutButton;
+    @Name("Message From")
+    @FindBy(css = "div[role='dialog']")
+    private WebElement messageDialog;
 
     public MailBoxArrow(WebDriver driver) {
         super(driver);
@@ -106,16 +106,6 @@ public class MailBoxArrow extends BasePage {
         sendKey(Keys.ENTER);
         sleepSeconds(2);
         return getEmailWithSubject(starredEmailMenu, emailSubject);
-    }
-
-    public boolean logOut(){
-        clickElementByJS(accountButton);
-        sleepSeconds(1);
-        clickElementByJS(logoutButton);
-        sleepSeconds(3);
-        String url = driver.getCurrentUrl();
-        boolean isLoggedOut = url.contains("ServiceLogin");
-        return isLoggedOut;
     }
 
     public void tabClick(WebElement menu){

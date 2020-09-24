@@ -49,10 +49,4 @@ public class MailBoxPageTest extends BasicTest{
         assertThat(deletedEmail, is(equalTo(null)));
     }
 
-    @Test(groups = "logout")
-    public void testLogout(){
-        boolean logedOut = mailBoxPage.logOut();
-        assertThat(logedOut, is(equalTo(true)));
-    }
-
 }

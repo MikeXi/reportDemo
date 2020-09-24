@@ -7,9 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.yandex.qatools.htmlelements.element.HtmlElement;
-import ru.yandex.qatools.htmlelements.element.TextInput;
 
-public class BasePage extends HtmlElement{
+public class BasePage extends HtmlElement {
     final WebDriver driver;
     final WebDriverWait wait;
     final JavascriptExecutor jsExecutor;

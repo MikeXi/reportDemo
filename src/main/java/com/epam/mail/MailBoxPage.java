@@ -44,12 +44,4 @@ public class MailBoxPage extends MailBoxArrow{
         return super.deleteEmail(emailSubject);
     }
 
-    public boolean logOut(){
-        return super.logOut();
-    }
-
-    public int getDraftMailCount(){
-        return super.getDraftMailCount();
-    }
-
 }

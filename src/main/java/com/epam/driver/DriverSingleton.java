@@ -1,43 +1,51 @@
 package com.epam.driver;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.ie.InternetExplorerDriver;
 
-public class DriverSingleton {
+public class DriverSingleton{
     private static final Logger logger = LogManager.getRootLogger();
-
+    private static DriverSingleton driverSingleton;
+    private static boolean initialized = false;
     private static WebDriver driver;
 
     private DriverSingleton(){}
 
-    public static void setBrowser(String browser){
+    public static synchronized DriverSingleton getInstance(){
+        if(initialized) return driverSingleton;
+        driverSingleton = new DriverSingleton();
+        initialized = true;
+        return driverSingleton;
+    }
+
+    public void setBrowser(String browser){
         System.setProperty("browser", browser);
     }
 
-    public static WebDriver getDriver(){
+    public WebDriver getDriver(){
+        DriverFactory driverFactory;
         if (null == driver){
-            logger.info("\n" + "Test browser is: " + System.getProperty("browser"));
             String browser = System.getProperty("browser").toUpperCase();
+            logger.info("\n" + "Test browser is: " + browser);
             switch (browser){
+                case "CHROME":{
+                    driverFactory = new ChromeDriverFactory();
+                    break;
+                }
                 case "FIREFOX": {
-                    WebDriverManager.firefoxdriver().setup();
-                    driver = new FirefoxDriver();
+                    driverFactory = new FirefoxDriverFactory();
+                    break;
                 }
                 case "IE":{
-                    WebDriverManager.iedriver().setup();
-                    driver = new InternetExplorerDriver();
+                    driverFactory = new IEDriverFactory();
+                    break;
                 }
                 default: {
-                    WebDriverManager.chromedriver().setup();
-                    driver = new ChromeDriver();
+                    throw new IllegalArgumentException("Cannot create driver for type: " + browser);
                 }
             }
-
+            driver = driverFactory.getDriver();
             driver.manage().window().maximize();
         }
         return driver;

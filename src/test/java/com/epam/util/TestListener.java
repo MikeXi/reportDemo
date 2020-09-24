@@ -48,7 +48,8 @@ public class TestListener extends TestListenerAdapter {
     }
 
     private void saveScreenshot(){
-        File screenCapture = ((TakesScreenshot) DriverSingleton
+        DriverSingleton driverSingleton = DriverSingleton.getInstance();
+        File screenCapture = ((TakesScreenshot) driverSingleton
                 .getDriver())
                 .getScreenshotAs(OutputType.FILE);
         try {

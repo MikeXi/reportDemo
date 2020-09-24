@@ -26,6 +26,5 @@ public class TestDataReader {
     }
     public static String getTestData(String key){
         return properties.getProperty(key);
-//        return resourceBundle.getString(key);
     }
 }
