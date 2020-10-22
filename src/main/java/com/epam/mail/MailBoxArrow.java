@@ -58,23 +58,22 @@ public class MailBoxArrow extends BasePage {
     private final Logger logger = LogManager.getRootLogger();
 
     public String getAccountEmail(){
-        objectIsDisplayed(accountButton);
-        String accountInfos = accountButton.getAttribute("aria-label");
+        String accountInfos = objectIsDisplayed(accountButton).getAttribute("aria-label");
         String[] accountInfo = accountInfos.split(":");
         return accountInfo[1].trim();
     }
 
     public boolean addDraftEmail(String emailSubject,String to, String body) {
         int draftCountBefore = getDraftMailCount();
-        logger.info("\nbefore add: "+draftCountBefore);
-        addEmailButton.click();
+        logger.info("Before add, draft email count is: "+draftCountBefore);
+        objectIsDisplayed(addEmailButton).click();
         MessageDialogPage messageDialogPage = new MessageDialogPage(driver);
         messageDialogPage.setMailContents(to,emailSubject,body);
         messageDialogPage.closeMessageDialog();
         sleepSeconds(2);
         int draftCountAfter = getDraftMailCount();
         clickFirstEmailSubject(draftEmailMenu,emailSubject);
-        logger.info("\nafter add: "+draftCountAfter);
+        logger.info("After add, draft email count is: "+draftCountAfter);
         return draftCountAfter == draftCountBefore + 1;
     }
 
@@ -83,7 +82,7 @@ public class MailBoxArrow extends BasePage {
     }
 
     public WebElement searchEmail(String emailSubject){
-        searchInput.sendKeys(emailSubject);
+        objectIsDisplayed(searchInput).sendKeys(emailSubject);
         sendKey(Keys.ENTER);
         sleepSeconds(2);
         return getEmailWithSubject(sentEmailMenu,emailSubject);
@@ -91,14 +90,12 @@ public class MailBoxArrow extends BasePage {
 
     public WebElement dragSentMailToStarred(String emailSubject){
         WebElement sentEmail = getEmailWithSubject(sentEmailMenu, emailSubject);
-        highlightElementByJS(starredEmailMenu);
         dragAndDrop(sentEmail,starredEmailMenu);
         return getEmailWithSubject(sentEmailMenu,emailSubject);
     }
 
     public WebElement deleteEmail(String emailSubject){
         WebElement email = getEmailWithSubject(starredEmailMenu, emailSubject);
-        highlightElementByJS(email);
         contextClick(email);
         for(int i = 0; i < 6; i ++){
             sendKey(Keys.DOWN);
@@ -113,14 +110,15 @@ public class MailBoxArrow extends BasePage {
         boolean isNotSearch = !(url.contains("search"));
         if(isNotSearch) {
             String menuName = url.split("#")[1].toUpperCase();
-            boolean inocrrectMenu = !menu.toString().toUpperCase().contains(menuName);
-            if (inocrrectMenu) {
-                menu.click();
-                while (inocrrectMenu) {
+            boolean incorrectMenu = !menu.toString().toUpperCase().contains(menuName);
+            if (incorrectMenu) {
+                logger.warn("You are in the incorrect menu.");
+                objectIsDisplayed(menu).click();
+                while (incorrectMenu) {
                     sleepSeconds(2);
                     url = driver.getCurrentUrl();
                     menuName = url.split("#")[1].toUpperCase();
-                    inocrrectMenu = !menu.toString().toUpperCase().contains(menuName);
+                    incorrectMenu = !menu.toString().toUpperCase().contains(menuName);
                 }
             }
         }
@@ -144,6 +142,7 @@ public class MailBoxArrow extends BasePage {
         WebElement firstEmail = null;
         List<WebElement> rows = getRows(menu);
         int rowCount = getRowsCount(menu);
+        logger.debug("Email count is: " + rowCount);
         for(int i = 0; i < rowCount; i++){
             WebElement row = rows.get(i);
             String rowSubject = row.getText();

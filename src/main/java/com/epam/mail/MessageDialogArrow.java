@@ -48,9 +48,9 @@ public class MessageDialogArrow extends BasePage {
     }
 
     public void setMailContents(String to, String subject, String body){
-        toInput.sendKeys(to);
-        subjectInput.sendKeys(subject);
-        bodyInput.sendKeys(body);
+        objectIsDisplayed(toInput).sendKeys(to);
+        objectIsDisplayed(subjectInput).sendKeys(subject);
+        objectIsDisplayed(bodyInput).sendKeys(body);
     }
 
     public String getMailContent(String emailSubject, String field){
@@ -68,7 +68,7 @@ public class MessageDialogArrow extends BasePage {
         MailBoxPage mailBoxPage = new MailBoxPage(driver);
         int beforeSendDraftCount = mailBoxPage.getDraftMailCount();
         sleepSeconds(1);
-        sendButton.click();
+        objectIsDisplayed(sendButton).click();
         sleepSeconds(2);
         int afterSendDraftCount = mailBoxPage.getDraftMailCount();
         if(afterSendDraftCount == beforeSendDraftCount - 1){
@@ -79,7 +79,7 @@ public class MessageDialogArrow extends BasePage {
     }
 
     public void closeMessageDialog(){
-        closeIcon.click();
+        objectIsDisplayed(closeIcon).click();
     }
 
 }

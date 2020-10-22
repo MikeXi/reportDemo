@@ -27,7 +27,7 @@ public class DriverSingleton{
         DriverFactory driverFactory;
         if (null == driver){
             String browser = System.getProperty("browser").toUpperCase();
-            logger.info("\n" + "Test browser is: " + browser);
+            logger.info("Test browser is: " + browser);
             switch (browser){
                 case "CHROME":{
                     driverFactory = new ChromeDriverFactory();

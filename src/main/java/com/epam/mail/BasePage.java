@@ -1,14 +1,14 @@
 package com.epam.mail;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.yandex.qatools.htmlelements.element.HtmlElement;
 
 public class BasePage extends HtmlElement {
+    private final Logger logger = LogManager.getRootLogger();
     final WebDriver driver;
     final WebDriverWait wait;
     final JavascriptExecutor jsExecutor;
@@ -26,14 +26,18 @@ public class BasePage extends HtmlElement {
     }
 
     public void clickElementByJS(WebElement element) {
+        objectIsDisplayed(element);
         jsExecutor.executeScript("arguments[0].click();", element);
     }
 
     public void dragAndDrop(WebElement sourceElement, WebElement targetElement) {
+        highlightElementByJS(sourceElement);
+        highlightElementByJS(targetElement);
         actionProvider.dragAndDrop(sourceElement, targetElement).build().perform();
     }
 
     public void contextClick(WebElement element) {
+        highlightElementByJS(element);
         actionProvider.contextClick(element).build().perform();
         sleepSeconds(2);
     }
@@ -50,16 +54,24 @@ public class BasePage extends HtmlElement {
         }
     }
 
-    public void objectIsDisplayed(WebElement object){
+    public WebElement objectIsDisplayed(WebElement object){
         int count = 0;
-        boolean isNotDisplayed = !object.isDisplayed();
+        boolean isNotDisplayed = true;
         while (isNotDisplayed){
-            sleepSeconds(2);
-            count ++;
-            isNotDisplayed = !object.isDisplayed();
-            if(count == 10){
-                break;
+            logger.debug("Retry count is: " + count);
+            logger.debug("Element is not displayed: " + isNotDisplayed);
+            try {
+                isNotDisplayed = !object.isDisplayed();
+                logger.debug("Element is displayed: " + !isNotDisplayed);
+            }catch (NoSuchElementException e) {
+                count ++;
+                if(count == 5){
+                    logger.error(e.getLocalizedMessage());
+                    break;
+                }
             }
         }
+        highlightElementByJS(object);
+        return object;
     }
 }

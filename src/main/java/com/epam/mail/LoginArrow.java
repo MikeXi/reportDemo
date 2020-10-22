@@ -45,16 +45,14 @@ public class LoginArrow extends BasePage implements LoginIService {
     public String loginGmail(){
         MailBoxPage mailBoxPage = new MailBoxPage(driver);
         driver.get(URL);
-        emailInput.sendKeys(user.getUsername());
-        nextButton.click();
-        objectIsDisplayed(passwordInput);
-        passwordInput.sendKeys(user.getPassword());
+        objectIsDisplayed(emailInput).sendKeys(user.getUsername());
+        objectIsDisplayed(nextButton).click();
+        objectIsDisplayed(passwordInput).sendKeys(user.getPassword());
         try {
-            nextButton.click();
+            objectIsDisplayed(nextButton).click();
         }catch (StaleElementReferenceException e){
-            nextButton.click();
+            objectIsDisplayed(nextButton).click();
         }
         return mailBoxPage.getAccountEmail();
     }
-
 }

@@ -12,7 +12,7 @@ public class TestDataReader {
     private static Properties properties = new Properties();
 
     public static void setEnvoronment(String env) throws IOException {
-        logger.info("\n" + "Test environment is: " + env);
+        logger.info("Test environment is: " + env);
         switch (env){
             case("QA"):{
                 BufferedReader bufferedReader = new BufferedReader(new FileReader("./src/config/qa.properties"));

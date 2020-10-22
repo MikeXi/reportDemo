@@ -2,6 +2,8 @@ package com.epam.mail;
 
 import com.epam.driver.DriverSingleton;
 import com.epam.service.TestDataReader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
@@ -14,10 +16,12 @@ public class BasicTest {
 
     public static WebDriver driver;
     public static String emailSubject;
+    private final Logger logger = LogManager.getRootLogger();
 
     @BeforeSuite
     @Parameters({"env", "browser"})
     public void setUp(String env, String browser) throws IOException {
+        logger.info("Initial the environment");
         TestDataReader.setEnvoronment(env);
         DriverSingleton driverSingleton = DriverSingleton.getInstance();
         driverSingleton.setBrowser(browser);

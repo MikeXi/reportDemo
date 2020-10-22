@@ -1,6 +1,7 @@
 package com.epam.util;
 
-import com.epam.driver.DriverSingleton;
+import com.epam.mail.BasicTest;
+import io.qameta.allure.Attachment;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 
 
 public class TestListener extends TestListenerAdapter {
-    private Logger log = LogManager.getRootLogger();
+    private Logger logger = LogManager.getRootLogger();
 
     public void onTestStart(ITestResult iTestResult) {
         deleteDir(new File(".//target/screenshots/"));
@@ -28,7 +29,7 @@ public class TestListener extends TestListenerAdapter {
     }
 
     public void onTestFailure(ITestResult iTestResult) {
-        saveScreenshot();
+        saveScreenshot(iTestResult);
     }
 
     public void onTestSkipped(ITestResult iTestResult) {
@@ -47,19 +48,27 @@ public class TestListener extends TestListenerAdapter {
 
     }
 
-    private void saveScreenshot(){
-        DriverSingleton driverSingleton = DriverSingleton.getInstance();
-        File screenCapture = ((TakesScreenshot) driverSingleton
-                .getDriver())
-                .getScreenshotAs(OutputType.FILE);
+    private void saveScreenshot(ITestResult iTestResult){
+        logger.error("Test is failed, go into take screenshot method");
+        String methodName = iTestResult.getMethod().getMethodName() + "_" + getCurrentTimeAsString();
+        TakesScreenshot driver=(TakesScreenshot) BasicTest.driver;
+        File screenFile = driver.getScreenshotAs(OutputType.FILE);
+        takePhoto(methodName,driver);
         try {
-            FileUtils.copyFile(screenCapture, new File(
+            FileUtils.copyFile(screenFile, new File(
                     ".//target/screenshots/"
-                            + getCurrentTimeAsString() +
-                            ".png"));
+                            + methodName +
+                            ".jpg"));
+            logger.info("Screenshot is saved successfully with name: " + methodName);
         } catch (IOException e) {
-            log.error("Failed to save screenshot: " + e.getLocalizedMessage());
+            logger.error("Failed to save screenshot: " + e.getLocalizedMessage());
         }
+    }
+
+    @Attachment(value = "Failure in method {0}"+", Failure screenshot as below：",type = "image/png")
+    public byte[]  takePhoto(String methodName ,TakesScreenshot driver){
+        byte[] screenshotAs = driver.getScreenshotAs(OutputType.BYTES);
+        return screenshotAs;
     }
 
     private String getCurrentTimeAsString(){

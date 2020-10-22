@@ -3,19 +3,22 @@
     <Appenders>
         <Console name="Console">
             <PatternLayout>
-                <Pattern>%d %p %c{2} [%t] %l %m%n</Pattern>
+                <Pattern>[%d] %p %c{2} [%t] (%l) - %m%n</Pattern>
             </PatternLayout>
         </Console>
-        <File name="File" fileName="target/logs/gmail-test.log">
+        <RollingFile name="RollingFile" fileName="target/logs/gmail-test.log" filePattern="target/logs/gmail-test-%d{yyyy-MM-dd}.log">
             <PatternLayout>
-                <Pattern>%d %p %c{2} [%t] %m%n</Pattern>
+                <Pattern>[%d] %p %c{2} [%t] (%l) - %m%n</Pattern>
             </PatternLayout>
-        </File>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="trace">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="File"/>
+            <AppenderRef ref="RollingFile"/>
         </Root>
     </Loggers>
 </Configuration>
